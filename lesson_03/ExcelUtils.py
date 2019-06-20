@@ -49,7 +49,7 @@ class Excel(object):
                     return self.excel.sheet_by_name(sheet_name)
                 else:
                     print("sheet name: %s does not exist in excel file" % (sheet_name))
-        except Exception, e:
+        except Exception as e:
             print(traceback.format_exc(e))
             return None
 
@@ -148,7 +148,8 @@ if __name__ == "__main__":
     material = original_sheet.col_values(6)
     open_qty = original_sheet.col_values(12)
     esd = original_sheet.col_values(14)
-    esd = ["%s/%02d/%02d" % xlrd.xldate_as_tuple(t, 0)[0:3] if not isinstance(t, basestring) else t for t in esd]
+    # esd = ["%s/%02d/%02d" % xlrd.xldate_as_tuple(t, 0)[0:3] if not isinstance(t, basestring) else t for t in esd]
+    esd = ["%s/%02d/%02d" % xlrd.xldate_as_tuple(t, 0)[0:3] if not isinstance(t, str) else t for t in esd]
     sloc = original_sheet.col_values(20)
     original_datas = zip(material, open_qty, esd, sloc)
 
@@ -169,7 +170,7 @@ if __name__ == "__main__":
 
 
         if row == -1:
-            print "%s, %s, %s, can not find suitable cell in tamplate" % (data[0], data[3], data[2])
+            print("%s, %s, %s, can not find suitable cell in tamplate" % (data[0], data[3], data[2]))
             csv_content += "%s,%s,%s,%s,%s\n" % ("false",data[0],data[1],data[2],data[3])
             bad_counter += 1
             continue
@@ -180,7 +181,7 @@ if __name__ == "__main__":
             qty_map[key] += data[1]
         else:
             qty_map[key] = data[1]
-        print "%s, %s, %s, %s, info added"  % (data[0], data[3], data[2], data[1])
+        print("%s, %s, %s, %s, info added"  % (data[0], data[3], data[2], data[1]))
         csv_content += "%s,%s,%s,%s,%s\n" % ("true", data[0], data[1], data[2], data[3])
         counter += 1
 
@@ -188,7 +189,7 @@ if __name__ == "__main__":
     updater = Updater(final_sheet_tamplate_file)
     updater.set_sheet(1)
     for key,value in qty_map.items():
-        print key, value
+        print(key, value)
         updater.update(key[0], key[1], value)
 
     import datetime
@@ -198,5 +199,5 @@ if __name__ == "__main__":
     with open("log_%s.csv" % nowTime, "w") as f:
         f.write(csv_content)
 
-    print "%s bad info, %s good info" % (bad_counter, counter)
+    print("%s bad info, %s good info" % (bad_counter, counter))
 
