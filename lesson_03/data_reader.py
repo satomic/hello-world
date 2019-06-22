@@ -54,9 +54,9 @@ def reader_excel_get_sheet(excel_path, sheet_name=None, sheet_index=None):
     raise Exception(err)
 
 
-def reader_csv(csv_path):
+def reader_csv(csv_path, sep=','):
     file_check(csv_path)
-    data = pd.read_csv(csv_path)
+    data = pd.read_csv(csv_path, sep)
     return data
 
 if __name__ == "__main__":
@@ -70,4 +70,5 @@ if __name__ == "__main__":
     print(sheet1.row_values(1))
     values = sheet1.row_values(1, start_colx=1, end_colx=7)
 
-    print(reader_csv("samples/data.csv"))
+    df = reader_csv("samples/data.csv")
+    print(df)
